@@ -230,61 +230,56 @@ class CommonResponse extends AbstractResponse
 
 
 	protected function goThroughResponse(){
-		if (in_array($this->response->decision, ['ERROR'])) {
-			// customize the error message if the reason indicates a field is missing
-			if ($this->response->reasonCode == 101) {
-				$missing_fields = 'Missing fields: ';
-				if (!isset($this->response->missingField)) {
-					$missing_fields = $missing_fields.'Unknown';
-				} elseif (is_array($this->response->missingField)) {
-					$missing_fields = $missing_fields.implode(', ', $this->response->missingField);
-				} else {
-					$missing_fields = $missing_fields.$this->response->missingField;
-				}
-				$this->statusOK = false;
-				$this->responseMessage =  $missing_fields;
-				$this->responseReasonCode = $this->response->reasonCode;
-				return;
-			}
-			// customize the error message if the reason code indicates a field is invalid
-			if ($this->response->reasonCode == 102) {
-				$invalid_fields = 'Invalid fields: ';
-				if (!isset($this->response->invalidField)) {
-					$invalid_fields = $invalid_fields.'Unknown';
-				} elseif (is_array($this->response->invalidField)) {
-					$invalid_fields = $invalid_fields.implode(', ', $this->response->invalidField);
-				} else {
-					$invalid_fields = $invalid_fields.$this->response->invalidField;
-				}
-				$this->statusOK = false;
-				$this->responseMessage =  $invalid_fields;
-				$this->responseReasonCode = $this->response->reasonCode;
-				return;
-			}
 
-			// note that ERROR means some kind of system error or the processor rejected invalid data - it probably doesn't mean the card was actually declined
+		// customize the error message if the reason indicates a field is missing
+		if ($this->response->reasonCode == 101) {
+			$missing_fields = 'Missing fields: ';
+			if (!isset($this->response->missingField)) {
+				$missing_fields = $missing_fields.'Unknown';
+			} elseif (is_array($this->response->missingField)) {
+				$missing_fields = $missing_fields.implode(', ', $this->response->missingField);
+			} else {
+				$missing_fields = $missing_fields.$this->response->missingField;
+			}
 			$this->statusOK = false;
-			$this->responseMessage =  self::$result_codes[ $this->response->reasonCode ];
+			$this->responseMessage =  $missing_fields;
 			$this->responseReasonCode = $this->response->reasonCode;
 			return;
-		} else {
-//			$this->statusOK = in_array($this->response->decision, ['ACCEPT', 'REVIEW', ]);
-			$this->statusOK = true;
-			$this->requestId = $this->response->requestID;
-			$this->requestToken = $this->response->requestToken;
-			$this->responseReasonCode = $this->response->reasonCode;
-			$this->responseMessage =  self::$result_codes[ $this->response->reasonCode ];
+		}
 
-			$this->authReconciliationId = isset($this->response->ccAuthReply->reconciliationID) ? $this->response->ccAuthReply->reconciliationID : null;
-			$this->authRecord = isset($this->response->ccAuthReply->authRecord) ? $this->response->ccAuthReply->authRecord : null;
-			$this->reconciliationId = isset($this->response->ccCaptureReply->reconciliationID) ? $this->response->ccCaptureReply->reconciliationID : null;
-
-			if (isset($this->response->ecDebitReply)) {
-				$this->reconciliationId = $this->response->ecDebitReply->reconciliationID;
-				$this->processorTransactionId = $this->response->ecDebitReply->processorTransactionID;
-				$this->verificationCode = $this->response->ecDebitReply->verificationCode;
-				$this->verificationCodeRaw = $this->response->ecDebitReply->verificationCodeRaw;
+		// customize the error message if the reason code indicates a field is invalid
+		if ($this->response->reasonCode == 102) {
+			$invalid_fields = 'Invalid fields: ';
+			if (!isset($this->response->invalidField)) {
+				$invalid_fields = $invalid_fields.'Unknown';
+			} elseif (is_array($this->response->invalidField)) {
+				$invalid_fields = $invalid_fields.implode(', ', $this->response->invalidField);
+			} else {
+				$invalid_fields = $invalid_fields.$this->response->invalidField;
 			}
+			$this->statusOK = false;
+			$this->responseMessage =  $invalid_fields;
+			$this->responseReasonCode = $this->response->reasonCode;
+			return;
+		}
+
+		$this->statusOK = in_array($this->response->reasonCode, [100]);
+//		$this->statusOK = in_array($this->response->decision, ['ACCEPT', 'REVIEW', ]);
+//		$this->statusOK = true;
+		$this->requestId = $this->response->requestID;
+		$this->requestToken = $this->response->requestToken;
+		$this->responseReasonCode = $this->response->reasonCode;
+		$this->responseMessage =  self::$result_codes[ $this->response->reasonCode ];
+
+		$this->authReconciliationId = isset($this->response->ccAuthReply->reconciliationID) ? $this->response->ccAuthReply->reconciliationID : null;
+		$this->authRecord = isset($this->response->ccAuthReply->authRecord) ? $this->response->ccAuthReply->authRecord : null;
+		$this->reconciliationId = isset($this->response->ccCaptureReply->reconciliationID) ? $this->response->ccCaptureReply->reconciliationID : null;
+
+		if (isset($this->response->ecDebitReply)) {
+			$this->reconciliationId = $this->response->ecDebitReply->reconciliationID;
+			$this->processorTransactionId = $this->response->ecDebitReply->processorTransactionID;
+			$this->verificationCode = $this->response->ecDebitReply->verificationCode;
+			$this->verificationCodeRaw = $this->response->ecDebitReply->verificationCodeRaw;
 		}
 	}
 
