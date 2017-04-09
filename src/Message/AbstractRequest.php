@@ -60,6 +60,20 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 	    return $initialize;
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return CommonResponse
+     */
+    public function sendData($data)
+    {
+        $client = $this->client;
+
+        $reply = $client->runTransaction($data);
+
+        return new CommonResponse($this, $reply);
+    }
+
 	/**
 	 * @param string $merchantId
 	 *

@@ -288,7 +288,7 @@ class CommonResponse extends AbstractResponse
 		return $this->statusOK;
 	}
 
-	public function isChallenge(){
+	public function isPending(){
 		return in_array($this->responseReasonCode, [
 			200,
 			201,
