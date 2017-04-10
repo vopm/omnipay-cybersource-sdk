@@ -27,8 +27,10 @@ class CommonResponse extends AbstractResponse
 	protected $authRecord = "";
 	protected $verificationCode = "";
 	protected $verificationCodeRaw = "";
+    protected $merchantReferenceCode;
+    protected $subscriptionReconciliationId;
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getResponseMessage()
@@ -230,7 +232,6 @@ class CommonResponse extends AbstractResponse
 
 
 	protected function goThroughResponse(){
-
 		// customize the error message if the reason indicates a field is missing
 		if ($this->response->reasonCode == 101) {
 			$missing_fields = 'Missing fields: ';
@@ -268,12 +269,14 @@ class CommonResponse extends AbstractResponse
 //		$this->statusOK = true;
 		$this->requestId = $this->response->requestID;
 		$this->requestToken = $this->response->requestToken;
+		$this->merchantReferenceCode = $this->response->merchantReferenceCode;
 		$this->responseReasonCode = $this->response->reasonCode;
 		$this->responseMessage =  self::$result_codes[ $this->response->reasonCode ];
 
 		$this->authReconciliationId = isset($this->response->ccAuthReply->reconciliationID) ? $this->response->ccAuthReply->reconciliationID : null;
 		$this->authRecord = isset($this->response->ccAuthReply->authRecord) ? $this->response->ccAuthReply->authRecord : null;
 		$this->reconciliationId = isset($this->response->ccCaptureReply->reconciliationID) ? $this->response->ccCaptureReply->reconciliationID : null;
+		$this->subscriptionReconciliationId = isset($this->response->paySubscriptionCreateReply->reconciliationID) ? $this->response->paySubscriptionCreateReply->reconciliationID : null;
 
 		if (isset($this->response->ecDebitReply)) {
 			$this->reconciliationId = $this->response->ecDebitReply->reconciliationID;
@@ -282,6 +285,10 @@ class CommonResponse extends AbstractResponse
 			$this->verificationCodeRaw = $this->response->ecDebitReply->verificationCodeRaw;
 		}
 	}
+
+	public function getToken(){
+	    return $this->subscriptionReconciliationId;
+    }
 
 	public function isSuccessful()
 	{
@@ -307,4 +314,16 @@ class CommonResponse extends AbstractResponse
 	{
 		return $this->responseReasonCode;
 	}
+
+    public function getTransactionReference()
+    {
+        return $this->requestId;
+    }
+
+    public function getTransactionId()
+    {
+        return $this->merchantReferenceCode;
+    }
+
+
 }

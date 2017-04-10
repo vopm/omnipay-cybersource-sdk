@@ -11,6 +11,7 @@ class GatewayTest extends GatewayTestCase
 	 * @var Gateway
 	 */
     public $gateway;
+    protected $paymentToken;
 
     public function setUp()
     {
@@ -24,13 +25,13 @@ class GatewayTest extends GatewayTestCase
     }
 
 
-	public function atestAuthorize(){
+	public function testAuthorize(){
 		$creditCard = $this->getValidCard();
 		$purchaseOptions = array(
 			'amount' => '12.00',
 			'currency' => 'USD',
 			'card' => $creditCard,
-			'merchantReferenceCode' => uniqid()
+			'transactionId' => uniqid()
 		);
 
 		/** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
@@ -43,38 +44,123 @@ class GatewayTest extends GatewayTestCase
 
 	}
 
-	public function testCapture(){
-		$creditCard      = $this->getValidCard();
-		$uniqid          = uniqid();
-		$purchaseOptions = array(
-			'amount' => '12.00',
-			'card' => $creditCard,
-			'merchantReferenceCode' => $uniqid
-		);
+    public function testPurchase(){
 
-		/** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
-		$request = $this->gateway->authorize($purchaseOptions);
+        $purchaseOptions = array(
+            'amount' => '12.00',
+            'currency' => 'USD',
+            'merchantCustomerId' => '12345',
+            'deviceFingerPrint' => '4917176323706201603009',
+            'card' => $this->getValidCard(),
+            'transactionId' => 'DO1234567891'
+        );
 
-		/** @var \Omnipay\Cybersource\Message\CommonResponse $response */
-		$response = $request->send();
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->purchase($purchaseOptions);
 
-		$purchaseOptions = array(
-			'amount' => '12.00',
-			'currency' => 'usd',
-			'merchantReferenceCode' => $uniqid,
-			'authRequestID' => $response->getAuthReconciliationId(),
-		);
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
 
-		/** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
-		$request = $this->gateway->capture($purchaseOptions);
+        $this->assertEquals(true, $response->isPending(), $response->getResponseMessage());
+        $this->assertNotEmpty($response->getAuthReconciliationId());
 
-		/** @var \Omnipay\Cybersource\Message\CommonResponse $response */
-		$response = $request->send();
-		$this->assertEquals(true, $response->isSuccessful(), $response->getRequestId() . '===>' . $response->getResponseMessage());
+    }
 
-	}
+    public function testVoidCapture(){
+        $purchaseOptions = array(
+            'transactionReference' => '4917176323706201603009',
+            'transactionId' => 'DO1234567890',
+        );
 
-	public function getValidCard()
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->voidCapture($purchaseOptions);
+
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
+
+        $this->assertTrue($response->isSuccessful(), $response->getMessage());
+
+    }
+
+    public function testCapture(){
+        $purchaseOptions = array(
+            'amount' => '12.00',
+            'transactionReference' => '4917176323706201603009',
+            'deviceFingerPrint' => '4917176323706201603009',
+            'transactionId' => 'DO1234567890',
+        );
+
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->capture($purchaseOptions);
+
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
+
+
+        $this->assertTrue($response->isSuccessful(), $response->getMessage());
+
+    }
+
+    public function testCreateCard(){
+
+        $purchaseOptions = array(
+            'amount' => 0.00,
+            'currency' => 'USD',
+            'merchantCustomerId' => '12345',
+            'deviceFingerPrint' => '4917176323706201603009',
+            'card' => $this->getValidCard(),
+            'transactionId' => 'DO1234567891'
+        );
+
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->createCard($purchaseOptions);
+
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
+
+        $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
+        $this->assertNotEmpty($response->getTransactionReference()); //token
+
+        $this->paymentToken = $response->getTransactionReference();
+
+    }
+
+    public function testTokenAuthorization(){
+
+        $purchaseOptions = array(
+            'amount' => 10.00,
+            'currency' => 'USD',
+            'deviceFingerPrint' => '2342566235234',
+            'token'=>$this->paymentToken,
+            'transactionId' => 'US23492834944'
+        );
+
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->authorize($purchaseOptions);
+
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
+
+        $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
+    }
+
+    public function testDeleteCard(){
+
+        $purchaseOptions = array(
+            'token'=>$this->paymentToken,
+            'transactionId' => 'US23492834944'
+        );
+
+        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        $request = $this->gateway->deleteCard($purchaseOptions);
+
+        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        $response = $request->send();
+
+        $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
+    }
+
+    public function getValidCard()
 	{
 		return array(
 			'firstName' => 'Example',

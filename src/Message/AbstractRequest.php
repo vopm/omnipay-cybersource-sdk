@@ -167,6 +167,22 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getParameter('merchantReferenceCode');
     }
 
+    public function getDeviceFingerPrint(){
+        return $this->getParameter('deviceFingerprintID');
+    }
+
+    public function setDeviceFingerPrint($value){
+        return $this->setParameter('deviceFingerprintID', $value);
+    }
+
+    public function getMerchantCustomerId(){
+        return $this->getParameter('merchantCustId');
+    }
+
+    public function setMerchantCustomerId($value){
+        return $this->setParameter('merchantCustId', $value);
+    }
+
     public function getEndpoint()
     {
         return $this->getTestMode() ? self::TEST_ENDPOINT : self::LIVE_ENDPOINT;
@@ -192,11 +208,13 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return empty($types[$brand]) ? null : $types[$brand];
     }
 
-	public function createRequest($merchantReferenceCode)
+	public function createRequest($merchantReferenceCode = null)
 	{
 		$request = new stdClass();
 		$request->merchantID = $this->getMerchantId();
 		$request->merchantReferenceCode = $merchantReferenceCode;
+		$request->deviceFingerprintID = $this->getDeviceFingerPrint();
+		$request->customerID = $this->getMerchantCustomerId();
 		$request->transactionKey = $this->getTransactionKey();
 		$request->clientLibrary = $this->client::CLIENT_LIBRARY_VERSION;
 		$request->clientLibraryVersion = phpversion();

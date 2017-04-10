@@ -7,9 +7,9 @@ use SimpleXMLElement;
 use stdClass;
 
 /**
- * Cybersource Capture Request
+ * Cybersource Refund Request
  */
-class CaptureRequest extends AbstractRequest
+class RefundRequest extends AbstractRequest
 {
 	/**
 	 *
@@ -20,12 +20,11 @@ class CaptureRequest extends AbstractRequest
         $this->validate('transactionReference');
 
 	    $request = $this->createRequest($this->getTransactionId());
+	    $ccAuthReversalService = new stdClass();
+	    $ccAuthReversalService->run = 'true';
+	    $ccAuthReversalService->authRequestID = $this->getTransactionReference();
 
-	    $ccCaptureService = new stdClass();
-	    $ccCaptureService->run = 'true';
-	    $ccCaptureService->authRequestID = $this->getTransactionReference();
-
-		$request->ccCaptureService = $ccCaptureService;
+		$request->ccAuthReversalService = $ccAuthReversalService;
 
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->grandTotalAmount = $this->getAmount();

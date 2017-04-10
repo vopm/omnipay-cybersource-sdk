@@ -14,15 +14,22 @@ class AuthorizeRequest extends AbstractRequest
 
 	public function getData()
     {
-	    $request = $this->createRequest($this->getMerchantReferenceCode());
+	    $request = $this->createRequest($this->getTransactionId());
 
 		$ccAuthService = new stdClass();
 		$ccAuthService->run = 'true';
 		$request->ccAuthService = $ccAuthService;
 
-	    $request->card = $this->createCard();
+		if ($this->getToken()){
+            $request->recurringSubscriptionInfo = (object)[
+                'subscriptionID'=>$this->getToken()
+            ];
+        }else{
+            $request->card = $this->createCard();
+        }
+
 	    $request->billTo = $this->createBillingAddress();
-	    $request->shipTo = $this->createBillingAddress();
+	    $request->shipTo = $this->createShippingAddress();
 
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->currency = $this->getCurrency();
