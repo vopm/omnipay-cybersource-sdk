@@ -31,7 +31,7 @@ class GatewayTest extends GatewayTestCase
 			'amount' => '12.00',
 			'currency' => 'USD',
 			'card' => $creditCard,
-			'transactionId' => uniqid()
+			'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd'
 		);
 
 		/** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
