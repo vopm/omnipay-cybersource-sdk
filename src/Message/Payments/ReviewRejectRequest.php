@@ -6,9 +6,9 @@ use Omnipay\CyberSourceSoap\Message\AbstractRequest;
 use stdClass;
 
 /**
- * Cybersource Capture Request
+ * Cybersource Review Reject Request
  */
-class ReviewApproveRequest extends AbstractRequest
+class ReviewRejectRequest extends AbstractRequest
 {
     public function getSuccessStatus(){
         return 'PendingCapture';
@@ -24,7 +24,6 @@ class ReviewApproveRequest extends AbstractRequest
 		    'run'=>'true',
             'actionCode'=>'ACCEPT',
             'requestID'=>$this->getTransactionReference(),
-            'authRequestID'=>$this->getTransactionReference(),
             'comments'=>$this->getComment(),
         );
 

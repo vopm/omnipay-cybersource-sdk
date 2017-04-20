@@ -119,6 +119,26 @@ class Gateway extends AbstractGateway
     /**
      * @param array $parameters
      *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\ReviewApproveRequest
+     */
+    public function approve(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\ReviewApproveRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\AuthorizeRequest
+     */
+    public function reject(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\ReviewRejectRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
      * @return \Omnipay\CyberSourceSoap\Message\Payments\CaptureRequest
      */
     public function capture(array $parameters = array())

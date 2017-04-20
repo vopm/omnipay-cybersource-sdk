@@ -25,7 +25,7 @@ class GatewayTest extends GatewayTestCase
     }
 
 
-	public function testAuthorize(){
+	public function atestAuthorize(){
 		$creditCard = $this->getValidCard();
 		$purchaseOptions = array(
 			'amount' => '12.00',
@@ -55,6 +55,25 @@ class GatewayTest extends GatewayTestCase
 		$this->assertNotEmpty($response->getAuthReconciliationId());
 
 	}
+
+    public function testApproveReview(){
+        $purchaseOptions = array(
+            'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd',
+            'transactionReference' => '4927105050986017703011',
+            'comment'=>'SOAP API comment'
+        );
+
+        /** @var \Omnipay\CyberSourceSoap\Message\Payments\AuthorizeRequest $request */
+        $request = $this->gateway->approve($purchaseOptions);
+
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
+        $response = $request->send();
+
+        print_r($response->getData());
+
+        $this->assertTrue($response->isSuccessful());
+
+    }
 
     public function atestPurchase(){
 
