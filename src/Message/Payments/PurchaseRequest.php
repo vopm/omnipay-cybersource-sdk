@@ -1,9 +1,7 @@
 <?php
 
-namespace Omnipay\Cybersource\Message;
+namespace Omnipay\CyberSourceSoap\Message\Payments;
 
-use DOMDocument;
-use SimpleXMLElement;
 use stdClass;
 
 /**

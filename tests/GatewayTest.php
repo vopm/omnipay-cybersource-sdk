@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Cybersource;
+namespace Omnipay\CyberSourceSoap;
 
 use Omnipay\Tests\GatewayTestCase;
 
@@ -31,20 +31,32 @@ class GatewayTest extends GatewayTestCase
 			'amount' => '12.00',
 			'currency' => 'USD',
 			'card' => $creditCard,
-			'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd'
+			'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd',
+            'merchantData'=>[
+                'field1'=>'RETAIL',
+                'field3'=>'WEB',
+            ],
+            'items'=>[
+                [
+                    'sku'=>"123456",
+                    'amount'=>12.00,
+                    'price'=>12.00,
+                    'quantity'=>1
+                ]
+            ]
 		);
 
-		/** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+		/** @var \Omnipay\CyberSourceSoap\Message\Payments\PurchaseRequest $request */
 		$request = $this->gateway->authorize($purchaseOptions);
 
-		/** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+		/** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
 		$response = $request->send();
 		$this->assertEquals(true, $response->isPending(), $response->getResponseMessage());
 		$this->assertNotEmpty($response->getAuthReconciliationId());
 
 	}
 
-    public function testPurchase(){
+    public function atestPurchase(){
 
         $purchaseOptions = array(
             'amount' => '12.00',
@@ -55,10 +67,10 @@ class GatewayTest extends GatewayTestCase
             'transactionId' => 'DO1234567891'
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->purchase($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
         $this->assertEquals(true, $response->isPending(), $response->getResponseMessage());
@@ -66,23 +78,23 @@ class GatewayTest extends GatewayTestCase
 
     }
 
-    public function testVoidCapture(){
+    public function atestVoidCapture(){
         $purchaseOptions = array(
             'transactionReference' => '4917176323706201603009',
             'transactionId' => 'DO1234567890',
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->voidCapture($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
         $this->assertTrue($response->isSuccessful(), $response->getMessage());
 
     }
 
-    public function testCapture(){
+    public function atestCapture(){
         $purchaseOptions = array(
             'amount' => '12.00',
             'transactionReference' => '4917176323706201603009',
@@ -90,10 +102,10 @@ class GatewayTest extends GatewayTestCase
             'transactionId' => 'DO1234567890',
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->capture($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
 
@@ -101,7 +113,7 @@ class GatewayTest extends GatewayTestCase
 
     }
 
-    public function testCreateCard(){
+    public function atestCreateCard(){
 
         $purchaseOptions = array(
             'amount' => 0.00,
@@ -112,10 +124,10 @@ class GatewayTest extends GatewayTestCase
             'transactionId' => 'DO1234567891'
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->createCard($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
         $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
@@ -125,7 +137,7 @@ class GatewayTest extends GatewayTestCase
 
     }
 
-    public function testTokenAuthorization(){
+    public function atestTokenAuthorization(){
 
         $purchaseOptions = array(
             'amount' => 10.00,
@@ -135,26 +147,26 @@ class GatewayTest extends GatewayTestCase
             'transactionId' => 'US23492834944'
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->authorize($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
         $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
     }
 
-    public function testDeleteCard(){
+    public function atestDeleteCard(){
 
         $purchaseOptions = array(
             'token'=>$this->paymentToken,
             'transactionId' => 'US23492834944'
         );
 
-        /** @var \Omnipay\Cybersource\Message\PurchaseRequest $request */
+        /** @var \Omnipay\CyberSourceSoap\Message\PurchaseRequest $request */
         $request = $this->gateway->deleteCard($purchaseOptions);
 
-        /** @var \Omnipay\Cybersource\Message\CommonResponse $response */
+        /** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */
         $response = $request->send();
 
         $this->assertEquals(true, $response->isSuccessful(), $response->getResponseMessage());
@@ -183,7 +195,7 @@ class GatewayTest extends GatewayTestCase
 			'shippingState' => 'NY',
 			'shippingCountry' => 'US',
 			'shippingPhone' => '(555) 987-6543',
-			'email' => 'test@me.com',
+			'email' => 'yrojass@gmail.com',
 		);
 	}
 }

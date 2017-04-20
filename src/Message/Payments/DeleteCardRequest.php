@@ -1,10 +1,9 @@
 <?php
 
-namespace Omnipay\Cybersource\Message;
+namespace Omnipay\CyberSourceSoap\Message\Payments;
 
-use DOMDocument;
-use SimpleXMLElement;
-use stdClass;
+use Omnipay\CyberSourceSoap\Message\AbstractRequest;
+
 
 /**
  * Cybersource Delete Card Request

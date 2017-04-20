@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Cybersource;
+namespace Omnipay\CyberSourceSoap;
 
 use Omnipay\Common\AbstractGateway;
 
@@ -108,91 +108,100 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\AuthorizeRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\AuthorizeRequest
      */
     public function authorize(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\AuthorizeRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\AuthorizeRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\CaptureRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\CaptureRequest
      */
     public function capture(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\CaptureRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\CaptureRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\CaptureRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\CaptureRequest
      */
     public function voidCapture(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\VoidCaptureRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\VoidCaptureRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\PurchaseRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\PurchaseRequest
      */
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\PurchaseRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\PurchaseRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\VoidRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\VoidRequest
      */
     public function void(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\VoidRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\VoidRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\VoidRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\VoidRequest
      */
     public function createCard(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\CreateCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\CreateCardRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\RetrieveCardRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\RetrieveCardRequest
      */
     public function retrieveCard(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\RetrieveCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\RetrieveCardRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\UpdateCardRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\UpdateCardRequest
      */
     public function updateCard(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\UpdateCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\UpdateCardRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\DeleteCardRequest
+     *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\DeleteCardRequest
      */
     public function deleteCard(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\DeleteCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\DeleteCardRequest', $parameters);
     }
 
     /**
      * @param array $parameters
-     * @return \Omnipay\Cybersource\Message\CreateCardFromPaymentRequest
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\CreateCardFromPaymentRequest
      */
     public function tokenize(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Cybersource\Message\CreateCardFromPaymentRequest', $parameters);
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\CreateCardFromPaymentRequest', $parameters);
     }
 }

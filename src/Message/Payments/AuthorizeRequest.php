@@ -1,9 +1,8 @@
 <?php
 
-namespace Omnipay\Cybersource\Message;
+namespace Omnipay\CyberSourceSoap\Message\Payments;
 
-use DOMDocument;
-use SimpleXMLElement;
+use Omnipay\CyberSourceSoap\Message\AbstractRequest;
 use stdClass;
 
 /**
@@ -30,6 +29,14 @@ class AuthorizeRequest extends AbstractRequest
 
 	    $request->billTo = $this->createBillingAddress();
 	    $request->shipTo = $this->createShippingAddress();
+
+        if ($merchantData = $this->buildMerchantData()){
+            $data['merchantDefinedData'] = $merchantData;
+        }
+
+        if ($items = $this->buildOrderItems()){
+            $request->items = $items;
+        }
 
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->currency = $this->getCurrency();

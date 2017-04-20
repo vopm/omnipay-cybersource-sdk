@@ -1,11 +1,10 @@
 <?php
 
-namespace Omnipay\Cybersource\Message;
+namespace Omnipay\CyberSourceSoap\Message;
 
 use CybsClient;
 use CybsSoapClient;
 use Guzzle\Http\ClientInterface;
-use Omnipay\Cybersource\BankAccount;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 

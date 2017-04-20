@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Cybersource\Message;
+namespace Omnipay\CyberSourceSoap\Message;
 
 use DOMDocument;
 use Omnipay\Common\Exception\InvalidResponseException;
