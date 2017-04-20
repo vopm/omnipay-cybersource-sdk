@@ -10,6 +10,10 @@ use stdClass;
  */
 class VoidCaptureRequest extends AbstractRequest
 {
+    public function getSuccessStatus(){
+        return 'Voided';
+    }
+
 	public function getData()
     {
         $this->validate('transactionReference');

@@ -11,6 +11,10 @@ use stdClass;
  */
 class CaptureRequest extends AbstractRequest
 {
+    public function getSuccessStatus(){
+        return 'SettledSuccessfully';
+    }
+
 	/**
 	 *
 	 * @return CommonResponse

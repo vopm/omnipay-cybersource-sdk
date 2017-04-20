@@ -16,7 +16,8 @@ class CommonResponse extends AbstractResponse
 	/** @var \stdClass  */
 	protected $response = null;
 
-	protected $statusOK = false;
+	protected $status = false;
+	protected $successResponse = false;
 	protected $responseMessage = "";
 	protected $responseReasonCode = "";
 	protected $requestId = "";
@@ -232,6 +233,8 @@ class CommonResponse extends AbstractResponse
 
 
 	protected function goThroughResponse(){
+	    $this->data = $array = json_decode(json_encode($this->response), True);
+
 		// customize the error message if the reason indicates a field is missing
 		if ($this->response->reasonCode == 101) {
 			$missing_fields = 'Missing fields: ';
@@ -242,7 +245,7 @@ class CommonResponse extends AbstractResponse
 			} else {
 				$missing_fields = $missing_fields.$this->response->missingField;
 			}
-			$this->statusOK = false;
+			$this->successResponse = false;
 			$this->responseMessage =  $missing_fields;
 			$this->responseReasonCode = $this->response->reasonCode;
 			return;
@@ -258,15 +261,13 @@ class CommonResponse extends AbstractResponse
 			} else {
 				$invalid_fields = $invalid_fields.$this->response->invalidField;
 			}
-			$this->statusOK = false;
+			$this->successResponse = false;
 			$this->responseMessage =  $invalid_fields;
 			$this->responseReasonCode = $this->response->reasonCode;
 			return;
 		}
 
-		$this->statusOK = in_array($this->response->reasonCode, [100]);
-//		$this->statusOK = in_array($this->response->decision, ['ACCEPT', 'REVIEW', ]);
-//		$this->statusOK = true;
+		$this->successResponse = in_array($this->response->decision, ['ACCEPT', 'REVIEW']);
 		$this->requestId = $this->response->requestID;
 		$this->requestToken = $this->response->requestToken;
 		$this->merchantReferenceCode = $this->response->merchantReferenceCode;
@@ -277,6 +278,15 @@ class CommonResponse extends AbstractResponse
 		$this->authRecord = isset($this->response->ccAuthReply->authRecord) ? $this->response->ccAuthReply->authRecord : null;
 		$this->reconciliationId = isset($this->response->ccCaptureReply->reconciliationID) ? $this->response->ccCaptureReply->reconciliationID : null;
 		$this->subscriptionReconciliationId = isset($this->response->paySubscriptionCreateReply->reconciliationID) ? $this->response->paySubscriptionCreateReply->reconciliationID : null;
+
+		if ($this->isSuccessful() && method_exists($this->request, 'getSuccessStatus')){
+
+		    if (!$this->isPending()){
+                $this->status = $this->request->getSuccessStatus();
+            }else{
+                $this->status = 'PendingReview';
+            }
+        }
 
 		if (isset($this->response->ecDebitReply)) {
 			$this->reconciliationId = $this->response->ecDebitReply->reconciliationID;
@@ -292,7 +302,7 @@ class CommonResponse extends AbstractResponse
 
 	public function isSuccessful()
 	{
-		return $this->statusOK;
+		return $this->successResponse;
 	}
 
 	public function isPending(){
@@ -305,10 +315,29 @@ class CommonResponse extends AbstractResponse
 		]);
 	}
 
+    public function isCancelled()
+    {
+        return in_array(strtolower($this->getStatus()), ['voided', 'authreversed']);
+    }
+
 	public function getMessage()
 	{
 		return (string)$this->responseMessage;
 	}
+
+    public function getAmount()
+    {
+        if ($this->response->ccAuthReply){
+            return $this->response->ccAuthReply->amount;
+        }else if ($this->response->ccAuthReply){
+
+        }
+    }
+
+    public function getCurrency()
+    {
+        return $this->response->purchaseTotals->currency;
+    }
 
 	public function getReasonCode()
 	{
@@ -325,5 +354,7 @@ class CommonResponse extends AbstractResponse
         return $this->merchantReferenceCode;
     }
 
-
+    public function getStatus(){
+	    return $this->status;
+    }
 }

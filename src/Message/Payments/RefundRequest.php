@@ -10,6 +10,10 @@ use stdClass;
  */
 class RefundRequest extends AbstractRequest
 {
+    public function getSuccessStatus(){
+        return 'PendingSettlement';
+    }
+
 	public function getData()
     {
         $this->validate('transactionReference');

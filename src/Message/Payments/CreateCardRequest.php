@@ -23,9 +23,9 @@ class CreateCardRequest extends AbstractRequest
             'run'=>"true"
         ];
 
-        $request->card = $this->createCard();
-        $request->billTo = $this->createBillingAddress();
-        $request->shipTo = $this->createShippingAddress();
+        $request->card = $this->buildCard();
+        $request->billTo = $this->buildBillingAddress();
+        $request->shipTo = $this->buildShippingAddress();
 
         $purchaseTotals = new stdClass();
         $purchaseTotals->currency = $this->getCurrency();

@@ -33,8 +33,8 @@ class GatewayTest extends GatewayTestCase
 			'card' => $creditCard,
 			'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd',
             'merchantData'=>[
-                'field1'=>'RETAIL',
-                'field3'=>'WEB',
+                '1'=>'RETAIL',
+                '3'=>'WEB',
             ],
             'items'=>[
                 [
@@ -46,7 +46,7 @@ class GatewayTest extends GatewayTestCase
             ]
 		);
 
-		/** @var \Omnipay\CyberSourceSoap\Message\Payments\PurchaseRequest $request */
+		/** @var \Omnipay\CyberSourceSoap\Message\Payments\AuthorizeRequest $request */
 		$request = $this->gateway->authorize($purchaseOptions);
 
 		/** @var \Omnipay\CyberSourceSoap\Message\CommonResponse $response */

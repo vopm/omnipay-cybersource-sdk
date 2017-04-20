@@ -8,12 +8,11 @@ use stdClass;
 /**
  * Cybersource Capture Request
  */
-class AuthorizeRequest extends AbstractRequest
+class ReviewApproveRequest extends AbstractRequest
 {
     public function getSuccessStatus(){
         return 'PendingCapture';
     }
-
 
 	public function getData()
     {

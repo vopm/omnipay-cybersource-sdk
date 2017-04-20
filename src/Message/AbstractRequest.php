@@ -5,6 +5,7 @@ namespace Omnipay\CyberSourceSoap\Message;
 use CybsClient;
 use CybsSoapClient;
 use Guzzle\Http\ClientInterface;
+use Omnipay\Common\ItemBag;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -182,6 +183,31 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('merchantCustId', $value);
     }
 
+    public function getMerchantData()
+    {
+        return $this->getParameter('merchantData');
+    }
+
+    public function setMerchantData($value)
+    {
+        return $this->setParameter('merchantData', $value);
+    }
+
+    public function setItems($items){
+
+        if ($items && !$items instanceof ItemBag) {
+            $itemBag = new ItemBag();
+
+            foreach ($items as $item) {
+                $itemBag->add(new Item($item));
+            }
+        }else{
+            $itemBag = $items;
+        }
+
+        return $this->setParameter('items', $itemBag);
+    }
+
     public function getEndpoint()
     {
         return $this->getTestMode() ? self::TEST_ENDPOINT : self::LIVE_ENDPOINT;
@@ -221,7 +247,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 		return $request;
 	}
 
-	protected function createCard()
+	protected function buildCard()
 	{
 		/** @var \Omnipay\Common\CreditCard $creditCard */
 		$creditCard = $this->getCard();
@@ -245,7 +271,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 	/**
 	 * @return \stdClass
 	 */
-	protected function createBillingAddress()
+	protected function buildBillingAddress()
 	{
 		$data = $this->getParameter('billTo');
 		if (!empty($data)){
@@ -297,7 +323,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 		return $billTo;
 	}
 
-	protected function createShippingAddress()
+	protected function buildShippingAddress()
 	{
 		$data = $this->getParameter('shipTo');
 
@@ -349,5 +375,63 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
 		return $shipTo;
 	}
+
+    protected function buildMerchantData()
+    {
+        $data = $this->getMerchantData();
+
+        $fields = [];
+
+        foreach ($data as $fieldIndex=>$fieldValue){
+            if (!is_string($fieldIndex)){
+                $fields["field{$fieldIndex}"] = $fieldValue;
+            }else{
+                $fields[$fieldIndex] = $fieldValue;
+            }
+        }
+
+        return (object)$fields;
+    }
+
+    public function buildOrderItems(){
+        $items = $this->getItems();
+
+        $itemData = [];
+
+        /** @var Item $item */
+        foreach ($items as $item){
+            $row = [];
+
+            if ($value = $item->getAmount()){
+                $row['unitPrice'] = $value;
+            }
+
+            if ($value = $item->getSku()){
+                $row['productSku'] = $value;
+            }
+
+            if ($value = $item->getName()){
+                $row['productName'] = $value;
+            }
+
+            if ($value = $item->getName()){
+                $row['productName'] = $value;
+            }
+
+            if ($value = $item->getQuantity()){
+                $row['quantity'] = $value;
+            }
+
+            if ($value = $item->getPrice()){
+                $row['totalAmount'] = $value;
+            }
+
+            if ($row){
+                $itemData[] = $row;
+            }
+        }
+
+        return $itemData;
+    }
 
 }

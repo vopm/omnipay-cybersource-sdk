@@ -9,6 +9,9 @@ use stdClass;
  */
 class PurchaseRequest extends AuthorizeRequest
 {
+    public function getSuccessStatus(){
+        return 'SettledSuccessfully';
+    }
 
 	public function getData()
     {
