@@ -297,7 +297,7 @@ class CommonResponse extends AbstractResponse
 	}
 
 	public function getToken(){
-	    return $this->subscriptionReconciliationId;
+	    return $this->requestId;
     }
 
 	public function isSuccessful()
