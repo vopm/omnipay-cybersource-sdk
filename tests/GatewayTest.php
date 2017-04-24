@@ -56,7 +56,7 @@ class GatewayTest extends GatewayTestCase
 
 	}
 
-    public function testApproveReview(){
+    public function atestApproveReview(){
         $purchaseOptions = array(
             'transactionId' => 'c3ed6419-b55c-4d79-bbe4-14d21edf27bd',
             'transactionReference' => '4927105050986017703011',
@@ -132,10 +132,10 @@ class GatewayTest extends GatewayTestCase
 
     }
 
-    public function atestCreateCard(){
+    public function testCreateCard(){
 
         $purchaseOptions = array(
-            'amount' => 0.00,
+            'amount' => 16.09,
             'currency' => 'USD',
             'merchantCustomerId' => '12345',
             'deviceFingerPrint' => '4917176323706201603009',
@@ -196,7 +196,7 @@ class GatewayTest extends GatewayTestCase
 		return array(
 			'firstName' => 'Example',
 			'lastName' => 'User',
-			'number' => '4111111111111111',
+			'number' => '4485817003286948',
 			'expiryMonth' => rand(1, 12),
 			'expiryYear' => gmdate('Y') + rand(1, 5),
 			'cvv' => rand(100, 999),
