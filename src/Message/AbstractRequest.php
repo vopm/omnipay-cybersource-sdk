@@ -244,6 +244,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 		$request->clientLibrary = $this->client::CLIENT_LIBRARY_VERSION;
 		$request->clientLibraryVersion = phpversion();
 		$request->clientEnvironment = php_uname();
+
+        if ($merchantData = $this->buildMerchantData()){
+            $request->merchantDefinedData = $merchantData;
+        }
+
 		return $request;
 	}
 

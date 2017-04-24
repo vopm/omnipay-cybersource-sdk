@@ -34,10 +34,6 @@ class AuthorizeRequest extends AbstractRequest
 	    $request->billTo = $this->buildBillingAddress();
 	    $request->shipTo = $this->buildShippingAddress();
 
-        if ($merchantData = $this->buildMerchantData()){
-            $request->merchantDefinedData = $merchantData;
-        }
-
         if ($items = $this->buildOrderItems()){
             $request->items = $items;
         }
