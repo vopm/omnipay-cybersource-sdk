@@ -38,6 +38,12 @@ class AuthorizeRequest extends AbstractRequest
             $request->items = $items;
         }
 
+        if ($descriptor = $this->getDescription()){
+            $request->invoiceHeader = (object)array(
+                'merchantDescriptor'=>substr($descriptor, 0, 23)
+            );
+        }
+
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->currency = $this->getCurrency();
 	    $purchaseTotals->grandTotalAmount = $this->getAmount();

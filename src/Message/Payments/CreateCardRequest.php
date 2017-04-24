@@ -27,6 +27,12 @@ class CreateCardRequest extends AbstractRequest
         $request->billTo = $this->buildBillingAddress();
         $request->shipTo = $this->buildShippingAddress();
 
+        if ($descriptor = $this->getDescription()){
+            $request->invoiceHeader = (object)array(
+                'merchantDescriptor'=>substr($descriptor, 0, 23)
+            );
+        }
+
         $purchaseTotals = new stdClass();
         $purchaseTotals->currency = $this->getCurrency();
         $purchaseTotals->grandTotalAmount = $this->getAmount();

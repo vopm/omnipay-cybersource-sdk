@@ -31,6 +31,12 @@ class CaptureRequest extends AbstractRequest
 
 		$request->ccCaptureService = $ccCaptureService;
 
+        if ($descriptor = $this->getDescription()){
+            $request->invoiceHeader = (object)array(
+                'merchantDescriptor'=>substr($descriptor, 0, 23)
+            );
+        }
+
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->grandTotalAmount = $this->getAmount();
 	    $request->purchaseTotals = $purchaseTotals;
