@@ -35,7 +35,7 @@ class AuthorizeRequest extends AbstractRequest
 	    $request->shipTo = $this->buildShippingAddress();
 
         if ($items = $this->buildOrderItems()){
-            $request->items = $items;
+            $request->item = $items;
         }
 
         if ($descriptor = $this->getDescription()){

@@ -27,6 +27,10 @@ class CreateCardRequest extends AbstractRequest
         $request->billTo = $this->buildBillingAddress();
         $request->shipTo = $this->buildShippingAddress();
 
+        if ($items = $this->buildOrderItems()){
+            $request->item = $items;
+        }
+
         if ($descriptor = $this->getDescription()){
             $request->invoiceHeader = (object)array(
                 'merchantDescriptor'=>substr($descriptor, 0, 23)

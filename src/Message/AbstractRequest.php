@@ -388,14 +388,19 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $fields = [];
 
         foreach ($data as $fieldIndex=>$fieldValue){
-            if (!is_string($fieldIndex)){
-                $fields["field{$fieldIndex}"] = $fieldValue;
-            }else{
-                $fields[$fieldIndex] = $fieldValue;
-            }
+            $fields[] = (object)array(
+                'id'=>$fieldIndex,
+                '_'=>$fieldValue,
+            );
         }
 
-        return (object)$fields;
+        if ($fields){
+            return (object)array(
+                'mddField'=>$fields
+            );
+        }
+
+        return false;
     }
 
     public function buildOrderItems(){
@@ -403,9 +408,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $itemData = [];
 
+        $index = 1;
         /** @var Item $item */
         foreach ($items as $item){
-            $row = [];
+            $row = ['id'=>$index++];
 
             if ($value = $item->getAmount()){
                 $row['unitPrice'] = $value;
