@@ -418,7 +418,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             }
 
             if ($value = $item->getSku()){
-                $row['productSku'] = $value;
+                $row['productSKU'] = $value;
             }
 
             if ($value = $item->getName()){
