@@ -7,8 +7,8 @@ use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Omnipay\Common\Message\RequestInterface;
-use Omnipay\CyberSourceSoap\Responses\AfsReply;
-use Omnipay\CyberSourceSoap\Responses\AuthorizationReply;
+use Omnipay\CyberSourceSoap\Message\Responses\AfsReply;
+use Omnipay\CyberSourceSoap\Message\Responses\AuthorizationReply;
 
 /**
  * Cybersource Response
