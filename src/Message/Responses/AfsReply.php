@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\CyberSourceSoap\Responses;
+namespace Omnipay\CyberSourceSoap\Message\Responses;
 
 
 /**
