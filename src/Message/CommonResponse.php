@@ -7,6 +7,8 @@ use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Omnipay\Common\Message\RequestInterface;
+use Omnipay\CyberSourceSoap\Responses\AfsReply;
+use Omnipay\CyberSourceSoap\Responses\AuthorizationReply;
 
 /**
  * Cybersource Response
@@ -30,6 +32,12 @@ class CommonResponse extends AbstractResponse
 	protected $verificationCodeRaw = "";
     protected $merchantReferenceCode;
     protected $subscriptionReconciliationId;
+
+    /** @var  AuthorizationReply */
+    protected $authReply;
+
+    /** @var  AfsReply */
+    protected $afsReply;
 
     /**
 	 * @return string
@@ -230,8 +238,6 @@ class CommonResponse extends AbstractResponse
 		$this->goThroughResponse();
 	}
 
-
-
 	protected function goThroughResponse(){
 	    $this->data = $array = json_decode(json_encode($this->response), True);
 
@@ -294,6 +300,9 @@ class CommonResponse extends AbstractResponse
 			$this->verificationCode = $this->response->ecDebitReply->verificationCode;
 			$this->verificationCodeRaw = $this->response->ecDebitReply->verificationCodeRaw;
 		}
+
+        $this->authReply = AuthorizationReply::build($this->data);
+        $this->afsReply = AfsReply::build($this->data);
 	}
 
 	public function getToken(){
