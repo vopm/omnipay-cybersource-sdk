@@ -34,10 +34,10 @@ class CommonResponse extends AbstractResponse
     protected $subscriptionReconciliationId;
 
     /** @var  AuthorizationReply */
-    protected $authReply;
+    public $authReply;
 
     /** @var  AfsReply */
-    protected $afsReply;
+    public $afsReply;
 
     /**
 	 * @return string
