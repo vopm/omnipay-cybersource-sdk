@@ -37,6 +37,10 @@ class CaptureRequest extends AbstractRequest
             );
         }
 
+        if ($items = $this->buildOrderItems()){
+            $request->item = $items;
+        }
+
 	    $purchaseTotals = new stdClass();
 	    $purchaseTotals->grandTotalAmount = $this->getAmount();
 	    $request->purchaseTotals = $purchaseTotals;
