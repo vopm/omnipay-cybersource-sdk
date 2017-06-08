@@ -31,6 +31,7 @@ class Gateway extends AbstractGateway
             'transactionKey' => '',
             'username' => '',
             'password' => '',
+            'fingerPrintOrganizationId' => '',
         );
     }
 
@@ -50,6 +51,24 @@ class Gateway extends AbstractGateway
     public function getMerchantId()
     {
         return $this->getParameter('merchantId');
+    }
+
+    /**
+     * @param string $orgId
+     * @return $this
+     */
+    public function setFingerPrintOrganizationId($orgId)
+    {
+        $this->setParameter('fingerPrintOrganizationId', $orgId);
+        return $this;
+    }
+
+    /**
+     * return string
+     */
+    public function getFingerPrintOrganizationId()
+    {
+        return $this->getParameter('fingerPrintOrganizationId');
     }
 
     /**
