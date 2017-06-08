@@ -425,6 +425,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
                 $row['productName'] = $value;
             }
 
+            if ($value = $item->getCode()){
+                $row['code'] = $value;
+            }
+
             if ($value = $item->getName()){
                 $row['productName'] = $value;
             }

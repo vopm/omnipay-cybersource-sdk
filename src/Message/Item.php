@@ -15,6 +15,17 @@ class Item extends \Omnipay\Common\Item
         return $this->setParameter('sku', $value);
     }
 
+    public function getCode()
+    {
+        return $this->getParameter('code');
+    }
+
+    public function setCode($value)
+    {
+        return $this->setParameter('code', $value);
+    }
+
+
     /**
      * @return float get unit cost of item
      */
