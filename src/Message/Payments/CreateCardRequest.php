@@ -33,7 +33,7 @@ class CreateCardRequest extends AbstractRequest
 
         if ($descriptor = $this->getDescription()){
             $request->invoiceHeader = (object)array(
-                'merchantDescriptor'=>substr($descriptor, 0, 23)
+                'merchantDescriptorAlternate'=>substr($descriptor, 0, 23)
             );
         }
 
