@@ -387,11 +387,13 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $fields = [];
 
-        foreach ($data as $fieldIndex=>$fieldValue){
-            $fields[] = (object)array(
-                'id'=>$fieldIndex,
-                '_'=>$fieldValue,
-            );
+        if ($data && is_array($data)) {
+            foreach ($data as $fieldIndex=>$fieldValue){
+                $fields[] = (object)array(
+                    'id'=>$fieldIndex,
+                    '_'=>$fieldValue,
+                );
+            }
         }
 
         if ($fields){
@@ -408,41 +410,43 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $itemData = [];
 
-        $index = 1;
-        /** @var Item $item */
-        foreach ($items as $item){
-            $row = ['id'=>$index++];
+        if ($items && is_array($items)) {
+            $index = 1;
+            /** @var Item $item */
+            foreach ($items as $item) {
+                $row = ['id' => $index++];
 
-            if ($value = $item->getAmount()){
-                $row['unitPrice'] = $value;
-            }
+                if ($value = $item->getAmount()) {
+                    $row['unitPrice'] = $value;
+                }
 
-            if ($value = $item->getSku()){
-                $row['productSKU'] = $value;
-            }
+                if ($value = $item->getSku()) {
+                    $row['productSKU'] = $value;
+                }
 
-            if ($value = $item->getName()){
-                $row['productName'] = $value;
-            }
+                if ($value = $item->getName()) {
+                    $row['productName'] = $value;
+                }
 
-            if ($value = $item->getCode()){
-                $row['productCode'] = $value;
-            }
+                if ($value = $item->getCode()) {
+                    $row['productCode'] = $value;
+                }
 
-            if ($value = $item->getName()){
-                $row['productName'] = $value;
-            }
+                if ($value = $item->getName()) {
+                    $row['productName'] = $value;
+                }
 
-            if ($value = $item->getQuantity()){
-                $row['quantity'] = $value;
-            }
+                if ($value = $item->getQuantity()) {
+                    $row['quantity'] = $value;
+                }
 
-            if ($value = $item->getPrice()){
-                $row['totalAmount'] = $value;
-            }
+                if ($value = $item->getPrice()) {
+                    $row['totalAmount'] = $value;
+                }
 
-            if ($row){
-                $itemData[] = $row;
+                if ($row) {
+                    $itemData[] = $row;
+                }
             }
         }
 
