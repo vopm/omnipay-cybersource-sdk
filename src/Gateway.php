@@ -168,6 +168,16 @@ class Gateway extends AbstractGateway
     /**
      * @param array $parameters
      *
+     * @return \Omnipay\CyberSourceSoap\Message\Payments\RefundRequest
+     */
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\CyberSourceSoap\Message\Payments\RefundRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
      * @return \Omnipay\CyberSourceSoap\Message\Payments\CaptureRequest
      */
     public function voidCapture(array $parameters = array())
