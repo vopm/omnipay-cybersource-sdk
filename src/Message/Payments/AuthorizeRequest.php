@@ -38,6 +38,10 @@ class AuthorizeRequest extends AbstractRequest
             $request->item = $items;
         }
 
+        if ($linkToRequest = $this->getLinkToRequest()){
+            $request->linkToRequest = $linkToRequest;
+        }
+
         if ($descriptor = $this->getDescription()){
             $request->invoiceHeader = (object)array(
                 'merchantDescriptor'=>substr($descriptor, 0, 23)
@@ -50,5 +54,15 @@ class AuthorizeRequest extends AbstractRequest
 	    $request->purchaseTotals = $purchaseTotals;
 
 	    return $request;
+    }
+
+    public function getLinkToRequest()
+    {
+        return $this->getParameter('linkToRequest');
+    }
+
+    public function setLinkToRequest($value)
+    {
+        $this->setParameter('linkToRequest', $value);
     }
 }
