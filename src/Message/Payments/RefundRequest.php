@@ -23,7 +23,7 @@ class RefundRequest extends AbstractRequest
 	    $ccCreditService->run = 'true';
 	    $ccCreditService->captureRequestID = $this->getTransactionReference();
 
-        $request->ccAuthService = $ccCreditService;
+        $request->ccCreditService = $ccCreditService;
 
         if ($card = $this->buildCard()) {
             $request->card = $card; //for stand-alone credits

@@ -252,28 +252,36 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 		return $request;
 	}
 
-	protected function buildCard()
-	{
-		/** @var \Omnipay\Common\CreditCard $creditCard */
-		$creditCard = $this->getCard();
+    protected function buildCard()
+    {
+        /** @var \Omnipay\Common\CreditCard $creditCard */
+        $creditCard = $this->getCard();
 
-		if (!$creditCard) return null;
+        if (!$creditCard) return null;
+        if (empty($creditCard->getNumber())) return null;
 
-		$card = new \stdClass();
-		$card->accountNumber = $creditCard->getNumber();
-		$card->expirationMonth = $creditCard->getExpiryMonth();
-		$card->expirationYear = $creditCard->getExpiryYear();
+        $card = new \stdClass();
 
-		if (!is_null($creditCard->getCvv())) {
-			$card->cvNumber = $creditCard->getCvv();
-		}
+        $card->accountNumber = $creditCard->getNumber();
 
-		if (!is_null($this->getCardType())) {
-			$card->cardType = $this->getCardType();
-		}
+        if ($expirationMonth = $creditCard->getExpiryMonth()) {
+            $card->expirationMonth = $expirationMonth;
+        }
 
-		return $card;
-	}
+        if ($expirationYear = $creditCard->getExpiryYear()) {
+            $card->expirationYear = $expirationYear;
+        }
+
+        if (!is_null($creditCard->getCvv())) {
+            $card->cvNumber = $creditCard->getCvv();
+        }
+
+        if (!is_null($this->getCardType())) {
+            $card->cardType = $this->getCardType();
+        }
+
+        return $card;
+    }
 
 	/**
 	 * @return \stdClass
