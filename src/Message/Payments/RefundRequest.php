@@ -25,7 +25,9 @@ class RefundRequest extends AbstractRequest
 
         $request->ccAuthService = $ccCreditService;
 
-        $request->card = $this->buildCard(); //for stand-alone credits
+        if ($card = $this->buildCard()) {
+            $request->card = $card; //for stand-alone credits
+        }
 
         if ($orderRequestToken = $this->getRequestToken()) {
             $request->orderRequestToken = $orderRequestToken;

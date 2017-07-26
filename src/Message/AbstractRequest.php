@@ -257,6 +257,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 		/** @var \Omnipay\Common\CreditCard $creditCard */
 		$creditCard = $this->getCard();
 
+		if (!$creditCard) return null;
+
 		$card = new \stdClass();
 		$card->accountNumber = $creditCard->getNumber();
 		$card->expirationMonth = $creditCard->getExpiryMonth();
