@@ -410,7 +410,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $itemData = [];
 
-        if ($items && is_array($items)) {
+        if ($items && $items->count()) {
             $index = 1;
             /** @var Item $item */
             foreach ($items as $item) {
