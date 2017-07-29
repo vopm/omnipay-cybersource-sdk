@@ -28,7 +28,7 @@ class AfsReply
 
     public static function build($data)
     {
-        if ($data && $data['afsReply']){
+        if ($data && isset($data['afsReply'])){
             $instance = new self();
             $instance->data = $data['afsReply'];
 
@@ -44,7 +44,7 @@ class AfsReply
     }
 
     public function getReasonCode(){
-        return $this->data['reasonCode'];
+        return @$this->data['reasonCode'];
     }
 
     public function __get($name)
