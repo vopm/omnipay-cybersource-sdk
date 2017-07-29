@@ -31,7 +31,7 @@ class AuthorizationReply
 
     public static function build($data)
     {
-        if ($data && $data['ccAuthReply']){
+        if ($data && isset($data['ccAuthReply'])){
             $instance = new AuthorizationReply();
             $instance->data = $data['ccAuthReply'];
 
@@ -46,15 +46,15 @@ class AuthorizationReply
     }
 
     public function getReasonCode(){
-        return $this->data['reasonCode'];
+        return @$this->data['reasonCode'];
     }
 
     public function getAuthorizationCode(){
-        return $this->data['authorizationCode'];
+        return @$this->data['authorizationCode'];
     }
 
     public function getReconciliationID(){
-        return $this->data['authorizationCode'];
+        return @$this->data['authorizationCode'];
     }
 
     public function __get($name)
